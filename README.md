@@ -1,2 +1,3 @@
 # ts-std
-Standard TypeScript types and utility types
+
+TypeScript STD library and utility types
