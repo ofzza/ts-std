@@ -1,13 +1,13 @@
 {
   "name": "@ofzza/ts-std",
-  "version": "0.0.1-alpha-1",
+  "version": "0.0.1",
   "description": "Standard TypeScript types and utility types",
   "private": false,
-  "main": "./docs/index.js",
-  "types": "./docs/index.d.ts",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "scripts": {
-    "build": "tsc --build --clean && tsc",
-    "test": "tsc --build --clean && tsc && npx jasmine --config=./jasmine.json",
+    "build": "tsc --build --clean && tsc --declaration",
+    "test": "tsc --build --clean && tsc --declaration && npx jasmine --config=./jasmine.json",
     "prettier": "prettier --write ."
   },
   "pre-commit": [
