@@ -88,30 +88,27 @@ describe('IsGUID: A utility type chekcing if type is a GUID', () => {
   });
 });
 
-describe('GUID: GUID string type', () => {
+describe('GUID: GUID string type and guid() factory function', () => {
   it('Compile time checks', () => {
-    // Valid GUID
-    assert<GUID<'12345678-1234-1234-1234-12345678abcd'>>()('12345678-1234-1234-1234-12345678abcd');
-    assert<GUID<'12345678-1234-1234-1234-12345678abcd'>>()(guid('12345678-1234-1234-1234-12345678abcd'));
-    // Invalid GUID
-    refute<GUID<'!2345678-1234-1234-1234-12345678abcd'>>()('!2345678-1234-1234-1234-12345678abcd');
-    refute<GUID<'!2345678-1234-1234-1234-12345678abcd'>>()(guid('!2345678-1234-1234-1234-12345678abcd'));
     // Empty runtime assert for jasmine
     assert();
+    // No need to execute compile-time checks
+    if (true === true) return;
+    // Valid GUID is compile-time validated and cast as GUID
+    assert<string>()(guid('12345678-1234-1234-1234-12345678abcd'));
+    assert<GUID>()(guid('12345678-1234-1234-1234-12345678abcd'));
+    // Invalid GUID is compile-time invalidated and cast as string
+    assert<string>()(guid('!2345678-1234-1234-1234-12345678abcd'));
+    refute<GUID>()(guid('!2345678-1234-1234-1234-12345678abcd'));
+    // Non-literal GUID can't be compile-time validated and is assumed to be GUID
+    const _guid: string = '12345678-1234-1234-1234-12345678abcd';
+    assert<string>()(guid(_guid));
+    assert<GUID>()(guid(_guid));
   });
-});
-
-describe('GUID generator function, converts a string into a GUID type string, if properly formatted', () => {
-  it('Compile time checks', () => {
-    // Valid GUID
-    assert<GUID<'12345678-1234-1234-1234-12345678abcd'>>()('12345678-1234-1234-1234-12345678abcd');
-    assert<GUID<'12345678-1234-1234-1234-12345678abcd'>>()(guid('12345678-1234-1234-1234-12345678abcd'));
-    refute<never>()(guid('12345678-1234-1234-1234-12345678abcd'));
-    // Invalid GUID
-    refute<GUID<'!2345678-1234-1234-1234-12345678abcd'>>()('!2345678-1234-1234-1234-12345678abcd');
-    refute<GUID<'!2345678-1234-1234-1234-12345678abcd'>>()(guid('!2345678-1234-1234-1234-12345678abcd'));
-    assert<never>()(guid('!2345678-1234-1234-1234-12345678abcd'));
-    // Empty runtime assert for jasmine
-    assert(true);
+  it('Runtime checks', () => {
+    // Valid GUID will pass run-time validation
+    expect(() => guid('12345678-1234-1234-1234-12345678abcd')).not.toThrow();
+    // Invalid GUID will fail run-time validation
+    expect(() => guid('!2345678-1234-1234-1234-12345678abcd')).toThrow();
   });
 });

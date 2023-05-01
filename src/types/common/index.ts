@@ -1,2 +1,2 @@
 // Export GUID type
-export { GUID, IsGUID, guid } from './guid';
+export { guid, GUID } from './guid';

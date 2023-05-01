@@ -53,16 +53,27 @@ export type IsGUID<T extends string> = T extends `${infer A}-${infer B}-${infer 
 /**
  * Holds a unique, never assignable symbol combining with which makes GUID<T> a unique type
  */
-const GuidSymbol = Symbol('NeverGonnaHappen');
+const _guidSymbol = Symbol('NeverGonnaHappen');
 /**
  * GUID string type
  */
-export type GUID<T> = (T extends `${string & T}` ? (IsGUID<T> extends true ? T : never) : never) | typeof GuidSymbol;
+// export type GUID<T extends string> = (string extends T ? T : T extends `${string & T}` ? (IsGUID<T> extends true ? T : never) : never) & {
+//   [_guidSymbol]: typeof _guidSymbol;
+// };
+export type GUID = string & {
+  [_guidSymbol]: typeof _guidSymbol;
+};
 /**
  * GUID generator function, converts a string into a GUID type string, if properly formatted
- * @param id GUID string to check and cast as GUID
+ * @param guid GUID string to check and cast as GUID
  * @returns GUID type if provided with properly formatted string, `never˙type otherwise
  */
-export function guid<T extends string>(id: T): IsGUID<T> extends true ? GUID<T> : never {
-  return id as IsGUID<T> extends true ? GUID<T> : never;
+export function guid<T extends string>(guid: T): string extends T ? GUID : IsGUID<T> extends true ? GUID : string {
+  // Add runtime checks when necessary
+  if (!guid.match(/[0-9A-Fa-f]{8}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{12}/)) {
+    throw new Error(`Method guid() should be provided a valid GUID string, called with: "guid('${guid}')"!`);
+  }
+
+  // Perform compile type type checking
+  return guid as unknown as string extends T ? GUID : IsGUID<T> extends true ? GUID : string;
 }
