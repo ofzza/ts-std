@@ -3,7 +3,7 @@
 
 // Import dependencies
 import { assert, refute } from '../../utility/assertion';
-import { HexDigit, IsHexString, IsStringOfGivenLength, IsHexStringOfGivenLength, IsGUID, GUID, guid } from '../guid';
+import { HexDigit, IsHexString, IsStringOfGivenLength, IsHexStringOfGivenLength, IsGUID, GUID, guid } from './';
 
 describe('HexDigit: Single HEX digit type', () => {
   it('Compile time checks', () => {
@@ -20,7 +20,7 @@ describe('HexDigit: Single HEX digit type', () => {
   });
 });
 
-describe('IsHexString: A utility type checking if type is a string containing only hex characters', () => {
+describe('IsHexString<T>: A utility type checking if type is a string containing only hex characters', () => {
   it('Compile time checks', () => {
     // Valid
     assert<IsHexString<'1234567890abcdefABCDEF'>, true>;
@@ -33,7 +33,7 @@ describe('IsHexString: A utility type checking if type is a string containing on
   });
 });
 
-describe('IsStringOfGivenLength: A utility type checking if type is a string of a specified length', () => {
+describe('IsStringOfGivenLength<T, N>: A utility type checking if type is a string of a specified length', () => {
   it('Compile time checks', () => {
     assert<IsStringOfGivenLength<'1', 1>, true>; // Valid
     assert<IsStringOfGivenLength<'12', 1>, false>; // Invalid: long
@@ -44,7 +44,7 @@ describe('IsStringOfGivenLength: A utility type checking if type is a string of 
   });
 });
 
-describe('IsHexStringOfGivenLength: A utility type checking if type is a string of a specified length with only hex digits as characters', () => {
+describe('IsHexStringOfGivenLength<T, N>: A utility type checking if type is a string of a specified length with only hex digits as characters', () => {
   it('Compile time checks', () => {
     assert<IsHexStringOfGivenLength<'1', 1>, true>; // Valid
     assert<IsHexStringOfGivenLength<'!', 1>, false>; // Invallid characters
@@ -58,7 +58,7 @@ describe('IsHexStringOfGivenLength: A utility type checking if type is a string 
   });
 });
 
-describe('IsGUID: A utility type chekcing if type is a GUID', () => {
+describe('IsGUID<T>: A utility type chekcing if type is a GUID', () => {
   it('Compile time checks', () => {
     // Valid GUID
     assert<IsGUID<'12345678-1234-1234-1234-12345678abcd'>, true>;

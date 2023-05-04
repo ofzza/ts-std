@@ -66,7 +66,7 @@ export function assert<TAssertion, TComparison extends TAssertion = TAssertion>(
  * @returns Function only accepting a value of type different from provided generic `TRefutation` type. If matching type value or expression
  * is provided there will be a (compile time) error thrown. This allows for (compile time) refutation of types matching expected values (assetion of mismatching).
  */
-export function refute<TRefutation>(expression?: boolean): <T>(refutation: T extends infer R ? (R extends TRefutation ? never : T) : never) => void {
+export function refute<TRefutation>(expression?: boolean): <T>(refutation: T extends TRefutation ? never : T) => void {
   // If assertion defined, check assertion
   if (expression !== undefined) {
     // If jasmine injected into global scope, use jasmine's expectation to validate falsiness
@@ -88,7 +88,7 @@ export function refute<TRefutation>(expression?: boolean): <T>(refutation: T ext
    * expected values (assetion of mismatching).
    * @param refutation Value or expression to refute the type of (at compile time)
    */
-  const valueTypeRefutationFn = function <T>(refutation: T extends infer R ? (R extends TRefutation ? never : T) : never): void {};
+  const valueTypeRefutationFn = function <T>(refutation: T extends TRefutation ? never : T): void {};
   // Return function for (compile time) type refutation
   return valueTypeRefutationFn;
 }
