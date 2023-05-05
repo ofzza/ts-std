@@ -57,9 +57,6 @@ const _guidSymbol = Symbol('NeverGonnaHappen');
 /**
  * GUID string type
  */
-// export type GUID<T extends string> = (string extends T ? T : T extends `${string & T}` ? (IsGUID<T> extends true ? T : never) : never) & {
-//   [_guidSymbol]: typeof _guidSymbol;
-// };
 export type GUID = string & {
   [_guidSymbol]: typeof _guidSymbol;
 };
