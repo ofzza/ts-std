@@ -5,7 +5,7 @@
  * A class which constructs instances of type T
  * @template T Type the class constructs
  */
-export type Class<T extends object> = new (...args: Array<any>) => T;
+export type Class<T extends ClassInstance> = new (...args: Array<any>) => T;
 
 /**
  * An instance of type T of a class which constructs instances of type T

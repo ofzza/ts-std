@@ -2,8 +2,25 @@
 // ----------------------------------------------------------------------------
 
 // Import dependencies
+import * as root from '../../../';
 import { assert, refute } from '../../utility/assertion';
 import { Class, ClassInstance } from './';
+
+describe('JS class and class instance type definitions are exported from the library root', () => {
+  it('Class type', () => {
+    // Exported
+    assert<root.Class<any>>;
+    // Empty runtime assert for jasmine
+    assert();
+  });
+  it('ClassInstance type', () => {
+    // Exported
+    assert<root.ClassInstance<any>>;
+    assert<root.ClassInstance>;
+    // Empty runtime assert for jasmine
+    assert();
+  });
+});
 
 /**
  * Testing base class

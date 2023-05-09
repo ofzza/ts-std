@@ -1,2 +1,2 @@
 // Export common types
-export { guid, GUID } from './guid';
+export { isguid, guid, GUID } from './guid';

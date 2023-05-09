@@ -2,8 +2,26 @@
 // ----------------------------------------------------------------------------
 
 // Import dependencies
+import * as root from '../../../';
 import { assert, refute } from '../../utility/assertion';
-import { HexDigit, IsHexString, IsStringOfGivenLength, IsHexStringOfGivenLength, IsGUID, GUID, guid } from './';
+import { HexDigit, IsHexString, IsStringOfGivenLength, IsHexStringOfGivenLength, IsGUID, GUID, isguid, guid } from './';
+
+describe('GUID type and factory definitions are exported from the library root', () => {
+  it('GUID type', () => {
+    // Exported
+    assert<root.GUID>;
+    // Empty runtime assert for jasmine
+    assert();
+  });
+  it('isguid() function', () => {
+    // Exported
+    assert(!!root.isguid);
+  });
+  it('guid() function', () => {
+    // Exported
+    assert(!!root.guid);
+  });
+});
 
 describe('HexDigit: Single HEX digit type', () => {
   it('Compile time checks', () => {
@@ -85,6 +103,15 @@ describe('IsGUID<T>: A utility type chekcing if type is a GUID', () => {
     assert<IsGUID<'12345678-1234-1234-1234-12345678abcd-a'>, false>;
     // Empty runtime assert for jasmine
     assert();
+  });
+});
+
+describe('isguid(): GUID runtime validation function', () => {
+  it('Runtime checks', () => {
+    // Valid GUID will pass run-time validation
+    assert(isguid('12345678-1234-1234-1234-12345678abcd'));
+    // Invalid GUID will fail run-time validation
+    assert(!isguid('!2345678-1234-1234-1234-12345678abcd'));
   });
 });
 

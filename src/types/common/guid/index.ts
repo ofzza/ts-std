@@ -60,17 +60,27 @@ const _guidSymbol = Symbol('NeverGonnaHappen');
 export type GUID = string & {
   [_guidSymbol]: typeof _guidSymbol;
 };
+
+/**
+ * Checks if value is a valid GUID
+ * @param value Value being checked
+ * @returns If value is a valid GUID
+ */
+export function isguid(value: string): value is GUID {
+  return !!value.match(/[0-9A-Fa-f]{8}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{12}/);
+}
+
 /**
  * GUID generator function, converts a string into a GUID type string, if properly formatted
- * @param guid GUID string to check and cast as GUID
+ * @param value GUID string to check and cast as GUID
  * @returns GUID type if provided with properly formatted string, `never˙type otherwise
  */
-export function guid<T extends string>(guid: T): string extends T ? GUID : IsGUID<T> extends true ? GUID : string {
+export function guid<T extends string>(value: T): string extends T ? GUID : IsGUID<T> extends true ? GUID : string {
   // Add runtime checks when necessary
-  if (!guid.match(/[0-9A-Fa-f]{8}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{12}/)) {
-    throw new Error(`Method guid() should be provided a valid GUID string, called with: "guid('${guid}')"!`);
+  if (!isguid(value)) {
+    throw new Error(`Method guid() should be provided a valid GUID string, called with: "guid('${value}')"!`);
   }
 
   // Perform compile type type checking
-  return guid as unknown as string extends T ? GUID : IsGUID<T> extends true ? GUID : string;
+  return value as unknown as string extends T ? GUID : IsGUID<T> extends true ? GUID : string;
 }
