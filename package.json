@@ -1,6 +1,6 @@
 {
   "name": "@ofzza/ts-std",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Standard TypeScript types and utility types",
   "private": false,
   "main": "./index.js",
