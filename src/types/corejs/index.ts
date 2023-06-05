@@ -1,2 +1,2 @@
 // Export core types
-export { Class, ClassInstance } from './class';
+export { Class as Class, ClassInstance } from './class';
