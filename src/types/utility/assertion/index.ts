@@ -3,19 +3,19 @@
 
 /**
  * Function allows assertion of:
- *  - A value or expression evaluating as truthy (at runtime)
- *  - Two specified types being equal (at aompile time)
+ *  - Value or expression evaluating as truthy (at runtime)
+ *  - Two specified types being equal (at compile time)
  *  - Value or expression type equals a specified type (at compile time)
  *
- * ### Checking truthiness of a value or expression:
+ * ### Checking truthiness of a value or expression (`assert(expression: boolean)`):
  *
- * By passing an boolean argument to the function (or an expression evaluating to a boolean argument) the assert() function can be used to:
+ * By passing an boolean argument to the function (or an expression evaluating to a boolean argument) the `assert(expression: boolean)` function will:
  * - If Jasmine was detected to be present in the execution context: `expect(expression).toBeTrue()`
  * - If Jasmine was not detected, to:
- *   - Fail if the expression evaluates to `false`
- *   - Execute successfuly if expression evaluates to `true`
+ *   - Throw if the `expression: boolean` argument evaluates to `false`
+ *   - Execute successfully if `expression: boolean` argument evaluates to `true`
  *
- * This means the assert() function can be used as a typical assert both within and outside of Jasmine context, as:
+ * This means the `assert(expression: boolean)` function can be used as a typical assert both within and outside of Jasmine context, as:
  * ```ts
  * // This will work
  * assert(fnThatShouldWorkAndReturnTrue());
@@ -28,10 +28,10 @@
  * assert(someResult === 'NotAllowedValueOfTheResultVariable');
  * ```
  *
- * ### Checking that a value matches a type:
+ * ### Checking that a value matches a type (`assert<T>()(expression: T)`):
  *
  * If the first generic parameter is found to have been explicitly set, and function arguments we passed, the assert() function will return a type checking
- * function typed to the first generic parameter. In this way, you can write compile-time checks verifying typing of values or methods:
+ * function typed to the first generic parameter. In this way, you can write compile-time checks verifying typing of values or methods' return types:
  *
  * ```ts
  * // A custom, typed function used to lowercase property keys of type strings and not change if type number or symbol
@@ -72,10 +72,16 @@
  * is provided there will be a (compile time) error thrown. This allows for (compile time) assertion of types matching expected values.
  */
 export function assert<TAssertion, TComparison extends TAssertion = TAssertion>(expression?: boolean): (assertion: TAssertion) => void {
+  return _assert<TAssertion, TComparison>(expression, false);
+}
+export function _assert<TAssertion, TComparison extends TAssertion = TAssertion>(
+  expression?: boolean,
+  useTestingHarnessesIfDetected = true,
+): (assertion: TAssertion) => void {
   // If assertion defined, check assertion
   if (expression !== undefined) {
     // If jasmine injected into global scope, use jasmine's expectation to validate truthiness
-    if ('jasmine' in globalThis && 'expect' in globalThis) {
+    if (useTestingHarnessesIfDetected && 'jasmine' in globalThis && 'expect' in globalThis) {
       (globalThis as any).expect(expression).toBeTrue();
     }
     // ... else, check assertion and throw error if assertion broken
@@ -102,15 +108,15 @@ export function assert<TAssertion, TComparison extends TAssertion = TAssertion>(
  *  - Value or expression type equals a specified type (at compile time)
  *  - A value or expression evaluating as truthy (at runtime)
  *
- * ### Checking truthiness of a value or expression:
+ * ### Checking truthiness of a value or expression (`refute(expression: boolean)`):
  *
- * By passing an boolean argument to the function (or an expression evaluating to a boolean argument) the refute() function can be used to:
+ * By passing an boolean argument to the function (or an expression evaluating to a boolean argument) the `refute(expression: boolean)` function can be used to:
  * - If Jasmine was detected to be present in the execution context: `expect(expression).toBeFalse()`
  * - If Jasmine was not detected, to:
- *   - Fail if the expression evaluates to `true`
- *   - Execute successfuly if expression evaluates to `false`
+ *   - Throw if the `expression: boolean` argument evaluates to `true`
+ *   - Execute successfully if `expression: boolean` argument evaluates to `false`
  *
- * This means the refute() function can be used as a reverse of a typical assert both within and outside of Jasmine context, as:
+ * This means the `refute(expression: boolean)` function can be used as a reverse of a typical assert both within and outside of Jasmine context, as:
  * ```ts
  * // This will work
  * refute(fnThatShouldWorkAndReturnFalse());
@@ -123,10 +129,10 @@ export function assert<TAssertion, TComparison extends TAssertion = TAssertion>(
  * refute(someResult === 'ExpectedValueOfTheResultVariable');
  * ```
  *
- * ### Checking that a value mismatches a type:
+ * ### Checking that a value mismatches a type (`refute<T>()(expression: T extends TRefutation ? never : T)`):
  *
  * If the first generic parameter is found to have been explicitly set, and function arguments we passed, the refute() function will return a type checking
- * function typed to the first generic parameter. In this way, you can write compile-time checks refuting typing of values or methods:
+ * function typed to the first generic parameter. In this way, you can write compile-time checks refuting typing of values or methods' return types:
  *
  * ```ts
  * // A custom, typed function used to lowercase property keys of type strings and not change if type number or symbol
@@ -150,10 +156,13 @@ export function assert<TAssertion, TComparison extends TAssertion = TAssertion>(
  * is provided there will be a (compile time) error thrown. This allows for (compile time) refutation of types matching expected values (assetion of mismatching).
  */
 export function refute<TRefutation>(expression?: boolean): <T>(refutation: T extends TRefutation ? never : T) => void {
+  return _refute<TRefutation>(expression, false);
+}
+export function _refute<TRefutation>(expression?: boolean, useTestingHarnessesIfDetected = true): <T>(refutation: T extends TRefutation ? never : T) => void {
   // If assertion defined, check assertion
   if (expression !== undefined) {
     // If jasmine injected into global scope, use jasmine's expectation to validate falsiness
-    if ('jasmine' in globalThis && 'expect' in globalThis) {
+    if (useTestingHarnessesIfDetected && 'jasmine' in globalThis && 'expect' in globalThis) {
       (globalThis as any).expect(expression).toBeFalse();
     }
     // ... else if refutation passing, continue
