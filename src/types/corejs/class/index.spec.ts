@@ -3,7 +3,7 @@
 
 // Import dependencies
 import * as root from '../../../';
-import { assert, refute } from '../../utility/assertion';
+import { assert, refute } from '../../../utility/assertion';
 import { Class, ClassInstance } from './';
 
 describe('JS class and class instance type definitions are exported from the library root', () => {

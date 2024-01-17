@@ -62,25 +62,26 @@ export type GUID = string & {
 };
 
 /**
- * Checks if value is a valid GUID
- * @param value Value being checked
- * @returns If value is a valid GUID
+ * Performs a runtime check if string value is a valid GUID
+ * @param value String value being checked
+ * @returns If string value is a valid GUID
  */
-export function isguid(value: string): value is GUID {
+export function isguid(value: string): boolean {
   return !!value.match(/[0-9A-Fa-f]{8}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{4}\-[0-9A-Fa-f]{12}/);
 }
 
 /**
- * GUID generator function, converts a string into a GUID type string, if properly formatted
+ * GUID generator function, converts a string into a GUID type string, if properly formatted. If not properly formatter will throw a runtime error.
+ * @throws 'guid() should be provided a valid GUID string' error if passed a string value which is not a valid GUID
  * @param value GUID string to check and cast as GUID
- * @returns GUID type if provided with properly formatted string, `never˙type otherwise
+ * @returns GUID type if provided with properly formatted string, `never˙ type otherwise
  */
-export function guid<T extends string>(value: T): string extends T ? GUID : IsGUID<T> extends true ? GUID : string {
+export function guid<T extends string>(value: T): string extends T ? GUID : IsGUID<T> extends true ? GUID : never {
   // Add runtime checks when necessary
   if (!isguid(value)) {
-    throw new Error(`Method guid() should be provided a valid GUID string, called with: "guid('${value}')"!`);
+    throw new Error(`guid() should be provided a valid GUID string, called with: "guid('${value}')"!`);
   }
 
   // Perform compile type type checking
-  return value as unknown as string extends T ? GUID : IsGUID<T> extends true ? GUID : string;
+  return value as unknown as string extends T ? GUID : IsGUID<T> extends true ? GUID : never;
 }

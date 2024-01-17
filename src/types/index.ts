@@ -1,5 +1,3 @@
-// Export utility types
-export * from './utility';
 // Export common types
 export * from './common';
 // Export core JS types

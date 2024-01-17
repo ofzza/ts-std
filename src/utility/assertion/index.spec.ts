@@ -2,7 +2,7 @@
 // ----------------------------------------------------------------------------
 
 // Import dependencies
-import * as root from '../../../';
+import * as root from '../../';
 import { assert, _assert, refute, _refute } from './';
 
 describe('Assertion functions', () => {
@@ -25,7 +25,7 @@ describe('Assertion functions', () => {
     });
 
     it('Value type assertion: assert<T>()(expression: T)', () => {
-      assert(true);
+      assert();
 
       assert<boolean>()(true);
       assert<boolean>()(false);
@@ -56,7 +56,7 @@ describe('Assertion functions', () => {
     });
 
     it('Value type assertion: refute<T>()(expression: T)', () => {
-      refute(false);
+      refute();
 
       refute<boolean>()(123);
       refute<boolean>()('abc');

@@ -2,11 +2,25 @@
 
 TypeScript STD library, implementing some commonly used TypeScript types, utility types and related functionality.
 
+---
+
+Jump to section:
+
+- [Additional Typing](#additional-typing)
+  - [Core JS: Augmentation of typing of core JS functionality](#core-js)
+    - [`Class` and `ClassInstance`](#class-and-classinstance)
+  - [Common types: Additional common TS types](#common-types)
+    - [`GUID`](#guid-types-and-utilities)
+- [Utilities](#utilities)
+  - [` assert<,>(...)` / `refute<>(...)`](#assertrefute)
+
+# Additional Typing
+
 ## Core JS
 
 Base types and utility types easing usage of native JS functionality
 
-### `Class<typeof T>` and `ClassInstance<T>`
+### `Class` and `ClassInstance`
 
 #### `Class<typeof T>`
 
@@ -139,21 +153,42 @@ class Employee extends Person {
 
 // TODO: ,,,
 
-## Common
+## Common Types
 
 Commonly (re)used types and related functionality.
 
-### GUID
+### GUID Types and utilities
 
-// TODO: ...
+#### GUID type
 
-## Utility
+`GUID` type inherits from a `string` type, but is more specific. The way to cast a value to a `GUID`˙is by using the `guid(value: string): GUID | never` function which will:
 
-### Assert/Refute
+- Return a typed `GUID` value if the value provided is a valid GUID literal or is not a literal string value.
+- Return ˙a typed `never`, disallowing a cast if the provided literal value is not a valid GUID.
+- Throw a runtime error if the value provided is not a valid GUID.
+
+There is a also a `isguid(value: string): boolean` function available for (pre)checking if a string is valid `GUID` without throwing.
+
+```ts
+const guidA = guid('12345678-1234-1234-1234-12345678abcd'); // Variable "guidA" will be inferred as a "GUID" type
+
+const validGuid: string = '12345678-1234-1234-1234-12345678abcd';
+const guidB = guid(validGuid); // Variable "validGuid" will be inferred as a "GUID" type
+isguid(validGuid); // Returns true
+
+const guidC = guid('NOT A GUID'); // Assignment to variable "guidC" will fail because the literal value passed to `guid(...)` is not a valid GUID. If the code did somehow run, there would be a runtime error thrown once the value is determined not to be a valid GUID.
+
+const invalidGuid: string = 'NOT A GUID';
+const guidD = guid(invalidGuid); // Variable "guidD" will be inferred as a "GUID" type. There will be a runtime error thrown once the value is determined not to be a valid GUID.
+```
+
+# Utilities
+
+## Assert/Refute
 
 `assert<,>(...)` and `refute<>(...)` functions allow for runtime validation of expressions, within or outside of testing harnesses (such as Jasmine), but also for TS compile time validation of type matching.
 
-#### `assert<TAssertion, TComparison>(expression?: boolean)(assertion: TAssertion)`
+### `assert<TAssertion, TComparison>(expression?: boolean)(assertion: TAssertion)`
 
 Function allows assertion of:
 
@@ -163,7 +198,7 @@ Function allows assertion of:
 
 ---
 
-- ##### Checking truthiness of a value or expression (`assert(expression: boolean)`):
+- #### Checking truthiness of a value or expression (`assert(expression: boolean)`):
 
   By passing an boolean argument to the function (or an expression evaluating to a boolean argument) the `assert(expression: boolean)` function will:
 
@@ -183,7 +218,7 @@ Function allows assertion of:
   assert(someResult === 'NotAllowedValueOfTheResultVariable');
   ```
 
-- ##### Checking that a value matches a type (`assert<T>()(expression: T)`):
+- #### Checking that a value matches a type (`assert<T>()(expression: T)`):
 
   If the first generic parameter is found to have been explicitly set, and function arguments we passed, the assert() function will return a type checking function typed to the first generic parameter. In this way, you can write compile-time checks verifying typing of values or methods' return types:
 
@@ -199,7 +234,7 @@ Function allows assertion of:
   assert<string>()(lowercaseKey(Symbol('myProperty')));
   ```
 
-- ##### Comparison of two types:
+- #### Comparison of two types:
 
   By using both of the generic parameters, the assert() function can be used to check a custom type matching some other type. In this way, you can write compile-time checks verifying functionality of TS utility types:
 
@@ -214,7 +249,7 @@ Function allows assertion of:
   assert<null, Uppercase<string>>;
   ```
 
-#### `refute<TRefutation>(expression?: boolean)(refutation: AnythingBut<TRefutation>)`
+### `refute<TRefutation>(expression?: boolean)(refutation: AnythingBut<TRefutation>)`
 
 Function allows refutation of:
 
@@ -223,7 +258,7 @@ Function allows refutation of:
 
 ---
 
-- ##### Checking truthiness of a value or expression (`refute(expression: boolean)`):
+- #### Checking truthiness of a value or expression (`refute(expression: boolean)`):
 
   By passing an boolean argument to the function (or an expression evaluating to a boolean argument) the `refute(expression: boolean)` function can be used to:
 
@@ -243,7 +278,7 @@ Function allows refutation of:
   refute(someResult === 'ExpectedValueOfTheResultVariable');
   ```
 
-- ##### Checking that a value mismatches a type (`refute<T>()(expression: T extends TRefutation ? never : T)`):
+- #### Checking that a value mismatches a type (`refute<T>()(expression: T extends TRefutation ? never : T)`):
 
   If the first generic parameter is found to have been explicitly set, and function arguments we passed, the refute() function will return a type checking function typed to the first generic parameter. In this way, you can write compile-time checks refuting typing of values or methods' return types:
 
